@@ -1,97 +1,56 @@
 "use client";
 
-import "@blocksuite/presets/themes/affine.css";
+import { AffineSchemas } from '@blocksuite/blocks/models';
 import { createEmptyPage, DocEditor } from "@blocksuite/presets";
-import { useEffect, useRef, useState } from "react";
-import { ZipTransformer } from "@blocksuite/blocks";
-import { Job } from "@blocksuite/store";
+import "@blocksuite/presets/themes/affine.css";
+import { Job, Schema, Workspace } from "@blocksuite/store";
+import { useEffect, useRef } from "react";
+import { create } from "./actions";
+import "./style.css";
 
-export default function Editor() {
+export default function Editor({ content }) {
   const editorRef = useRef();
-  const [snapshot, setSanpshot] = useState();
-  const [blob, setBlob] = useState();
-  const [pages, setPages] = useState([]);
 
   const handleSaveButton = async () => {
     const editor = editorRef.current.instance;
     const page = editor.page;
     const workspace = page.workspace;
 
-    setBlob(
-      await ZipTransformer.exportPages(workspace, [...workspace.pages.values()])
-    );
-  };
+    const job = new Job({workspace});
 
-  const handleLoadButton = async () => {
-    const editor = editorRef.current.instance;
-    const page = editor.page;
-    const workspace = page.workspace;
-
-    await ZipTransformer.importPages(workspace, blob);
-    console.log(workspace.pages);
-  };
-
-  const handleCheckPages = () => {
-    const editor = editorRef.current.instance;
-    const page = editor.page;
-    const workspace = page.workspace;
-    console.log(workspace.pages.values());
-  };
-
-  const handleUpdatePage1 = () => {
-    const editor = editorRef.current.instance;
-    const page = editor.page;
-    const workspace = page.workspace;
-
-    const iterator = workspace.pages.values();
-    const firstPage = iterator.next();
-
-    editor.page = firstPage.value;
-    editor.requestUpdate();
-  };
-
-  const handleUpdatePage2 = async () => {
-    const editor = editorRef.current.instance;
-    const page = editor.page;
-    const workspace = page.workspace;
-
-    const iterator = workspace.pages.values();
-    const firstPage = iterator.next();
-    const secondPage = iterator.next();
-
-    editor.page = secondPage.value;
-    console.log(secondPage.value);
-    await secondPage.value.load();
-    editor.requestUpdate();
+    await create(await job.pageToSnapshot(page));
   };
 
   useEffect(() => {
-    if (editorRef.current.instance != null) return;
+    const getEditor = async () => {
+      const schema = new Schema().register(AffineSchemas);
+      const workspace = new Workspace({ schema });
+  
+      const job = new Job({workspace});
 
-    const page = createEmptyPage().init();
-    const editor = new DocEditor();
-    editor.page = page;
+      const editor = new DocEditor();
 
-    setPages([{ id: page.id, title: page.meta.title }]);
+      if(Object.keys(content).length > 0) {
+        const page = await job.snapshotToPage(content);
+        editor.page = page;
+      } else {
+        const page = createEmptyPage().init();
+        editor.page = page;
+      }
+  
+      if(editorRef.current.children.length === 0) {
+        editorRef.current.appendChild(editor);
+        editorRef.current.instance = editor;
+      }
+    }
 
-    editorRef.current.appendChild(editor);
-    editorRef.current.instance = editor;
+    getEditor();
   }, []);
-
-  const handleUpdatePage = (pageId) => {
-    console.log(pageId);
-  }
 
   return (
     <>
-      {pages.map(({ id, title }) => (
-        <button key={id} onClick={()=>{handleUpdatePage(id)}}>{title === "" ? "untitled" : title}</button>
-      ))}
-      <button onClick={handleSaveButton}>저장하기</button>
-      <button onClick={handleLoadButton}>불러오기</button>
-      <button onClick={handleCheckPages}>페이지 확인하기</button>
-      <button onClick={handleUpdatePage1}>1번재</button>
-      <button onClick={handleUpdatePage2}>2번째</button>
+      <button onClick={handleSaveButton}>save document</button>
+      <button onClick={() => {location.reload()}}>refresh page</button>
       <div ref={editorRef} />
     </>
   );
