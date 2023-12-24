@@ -50,6 +50,7 @@ export default function Editor({ content }) {
   return (
     <>
       <button onClick={handleSaveButton}>save document</button>
+      <button onClick={async () => {await create({}); location.reload();}}>remove document data</button>
       <button onClick={() => {location.reload()}}>refresh page</button>
       <div ref={editorRef} />
     </>
