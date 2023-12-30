@@ -4,14 +4,19 @@ import { AffineSchemas } from "@blocksuite/blocks/models";
 import { AffineEditorContainer, createEmptyPage } from "@blocksuite/presets";
 import "@blocksuite/presets/themes/affine.css";
 import { Job, Schema, Workspace } from "@blocksuite/store";
-import { useEffect, useRef } from "react";
-// import { create } from "./actions";
+import { useEffect, useRef, useState } from "react";
 import "./style.css";
+import { newPost } from "@/app/actions";
+import { docSpecs } from "./custom-block";
+import { useRouter } from "next/navigation";
 
 export default function Editor({ content }) {
   const editorRef = useRef();
+  const [pending, setPending] = useState(false);
+  const router = useRouter();
 
   const handleSaveButton = async () => {
+    setPending(true);
     const editor = editorRef.current.instance;
     const page = editor.page;
     const workspace = page.workspace;
@@ -36,18 +41,13 @@ export default function Editor({ content }) {
       });
     }
 
-    const contentForm = new FormData();
-    contentForm.append("title", page.meta.title);
-    contentForm.append(
-      "content",
+    await newPost(
+      page.meta.title,
       JSON.stringify(await job.pageToSnapshot(page))
     );
-
-    await fetch("http://localhost:8080/blog", {
-      method: "POST",
-      body: contentForm,
-    });
-    // await create(await job.pageToSnapshot(page));
+    setPending(false);
+    router.back();
+    router.refresh();
   };
 
   useEffect(() => {
@@ -55,20 +55,11 @@ export default function Editor({ content }) {
       const schema = new Schema().register(AffineSchemas);
       const workspace = new Workspace({ schema });
 
-      // const editor = new DocEditor();
       const editor = new AffineEditorContainer();
-      // editor.docSpecs = docSpecs;
+      editor.docSpecs = docSpecs;
 
       if (Object.keys(content).length > 0) {
         const job = new Job({ workspace });
-
-        // const assets = await (await fetch("http://localhost:8080/make/file")).json();
-        // for(const key of assets) {
-        //   const blob = await (await fetch(`http://localhost:8080/make/file/${key}`)).blob();
-        //   const value = new File([blob], key, { type: blob.type });
-
-        //   job.assets.set(key, value);
-        // }
 
         const page = await job.snapshotToPage(content);
         editor.page = page;
@@ -88,16 +79,9 @@ export default function Editor({ content }) {
 
   return (
     <>
-      <button onClick={handleSaveButton}>save document</button>
-      {/* <button
-        onClick={() => {
-          const { page } = editorRef.current.instance;
-
-          page.awarenessStore.setReadonly(page, !page.readonly);
-        }}
-      >
-        toggle readonly
-      </button> */}
+      <button onClick={handleSaveButton} disabled={pending}>
+        {pending ? "저장 중입니다." : "저장하기"}
+      </button>
       <div ref={editorRef} />
     </>
   );

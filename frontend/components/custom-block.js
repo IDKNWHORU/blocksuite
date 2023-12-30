@@ -1,9 +1,11 @@
-import { AffineSlashMenuWidget, DocEditorBlockSpecs } from '@blocksuite/blocks';
+import { AffineSlashMenuWidget, DocEditorBlockSpecs } from "@blocksuite/blocks";
 import { literal } from "lit/static-html.js";
 
 const SlashMenuWidget = AffineSlashMenuWidget;
 
-const menus = SlashMenuWidget.DEFAULT_OPTIONS.menus.filter((element, index) => index !== 3);
+const menus = SlashMenuWidget.DEFAULT_OPTIONS.menus.filter(
+  (element, index) => index !== 3
+);
 
 class CustomSlashMenu extends SlashMenuWidget {
   options = {
@@ -12,8 +14,8 @@ class CustomSlashMenu extends SlashMenuWidget {
   };
 }
 
-if(!customElements.get("affine-custom-slash-menu")) customElements.define("affine-custom-slash-menu", CustomSlashMenu);
-
+if (!customElements.get("affine-custom-slash-menu"))
+  customElements.define("affine-custom-slash-menu", CustomSlashMenu);
 
 const docSpecs = DocEditorBlockSpecs;
 const pageBlockSpec = docSpecs.shift();
