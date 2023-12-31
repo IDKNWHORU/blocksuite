@@ -33,7 +33,7 @@ public class PostController {
         var number = TSID.from(postId).toLong();
         var post = postRepository.findById(number).orElseThrow();
 
-        return ResponseEntity.ok(post);
+        return ResponseEntity.ok(new PostDTO(post));
     }
 
     @PostMapping("")

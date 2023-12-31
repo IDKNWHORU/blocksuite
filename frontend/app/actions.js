@@ -2,7 +2,9 @@
 
 export async function getPostList() {
   const getPostListResponse = await fetch("http://localhost:8080/post", {
-    cache: "no-store",
+    next: {
+      revalidate: 60,
+    },
   });
 
   if (!getPostListResponse.ok) return [];
@@ -11,10 +13,16 @@ export async function getPostList() {
 }
 
 export async function getPost(id) {
-  const getPostResponse = await fetch(`http://localhost:8080/post/${id}`);
+  const getPostResponse = await fetch(`http://localhost:8080/post/${id}`, {
+    next: {
+      revalidate: 60,
+    },
+  });
 
-  if (!getPostResponse.ok)
+  if (!getPostResponse.ok) {
+    console.log(getPostResponse, id);
     throw new Error("게시글을 불러오는 중에 문제가 발생했습니다.");
+  }
 
   return await getPostResponse.json();
 }
