@@ -1,10 +1,10 @@
 "use server";
 
+const serverURI = process.env.SERVER_URI;
+
 export async function getPostList() {
-  const getPostListResponse = await fetch("http://localhost:8080/post", {
-    next: {
-      revalidate: 60,
-    },
+  const getPostListResponse = await fetch(`${serverURI}/post`, {
+    cache: "no-store",
   });
 
   if (!getPostListResponse.ok) return [];
@@ -13,7 +13,7 @@ export async function getPostList() {
 }
 
 export async function getPost(id) {
-  const getPostResponse = await fetch(`http://localhost:8080/post/${id}`, {
+  const getPostResponse = await fetch(`${serverURI}/post/${id}`, {
     next: {
       revalidate: 60,
     },
@@ -28,7 +28,7 @@ export async function getPost(id) {
 }
 
 export async function newPost(title, content) {
-  const createPostResponse = await fetch("http://localhost:8080/post", {
+  const createPostResponse = await fetch(`${serverURI}/post`, {
     method: "POST",
     body: JSON.stringify({ title, content: content }),
     headers: {
