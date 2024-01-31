@@ -12,12 +12,10 @@ export default async function App() {
 
   return (
     <>
-      {list.map(({ id, title, createAt }) => {
+      {list.map(({ id, title }) => {
         return (
           <h1 key={id}>
-            <Link href={`/${id}`}>
-              {title} {createAt}
-            </Link>
+            <Link href={`/${id}`}>{title}</Link>
           </h1>
         );
       })}

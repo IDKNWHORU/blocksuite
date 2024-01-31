@@ -7,7 +7,7 @@ const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function getPostList() {
-  const { data } = await supabase.from("Post").select();
+  const { data } = await supabase.from("Post").select("id, title");
 
   return data;
 }
