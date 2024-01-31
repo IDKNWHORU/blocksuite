@@ -1,47 +1,23 @@
 "use server";
 
-const serverURI = process.env.SERVER_URI;
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = process.env.SUPABASE_URI;
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function getPostList() {
-  const getPostListResponse = await fetch(`${serverURI}/post`, {
-    cache: "no-store",
-  });
+  const { data } = await supabase.from("Post").select();
 
-  if (!getPostListResponse.ok) return [];
-
-  return await getPostListResponse.json();
+  return data;
 }
 
 export async function getPost(id) {
-  const getPostResponse = await fetch(`${serverURI}/post/${id}`, {
-    next: {
-      revalidate: 60,
-    },
-  });
+  const { data } = await supabase.from("Post").select().eq("id", id).single();
 
-  if (!getPostResponse.ok) {
-    console.log(getPostResponse, id);
-    throw new Error("게시글을 불러오는 중에 문제가 발생했습니다.");
-  }
-
-  return await getPostResponse.json();
+  return data;
 }
 
 export async function newPost(title, content) {
-  const createPostResponse = await fetch(`${serverURI}/post`, {
-    method: "POST",
-    body: JSON.stringify({ title, content: content }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    cache: "no-store",
-  });
-
-  if (!createPostResponse.ok) throw new Error("Failed to fetch data");
-
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(createPostResponse.text());
-    }, 1000);
-  });
+  const { error } = await supabase.from("Post").insert({ title, content });
 }

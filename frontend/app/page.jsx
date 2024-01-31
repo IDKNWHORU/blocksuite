@@ -5,6 +5,8 @@ export const metadata = {
   title: "WHORU 블로그",
 };
 
+export const revalidate = 5;
+
 export default async function App() {
   const list = await getPostList();
 
