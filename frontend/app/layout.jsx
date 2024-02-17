@@ -3,7 +3,7 @@ import "./global.css";
 export const metadata = {
   title: "WHORU 블로그",
   description:
-    "안녕하세요, WHORU의 블로그 입니다. 프로그래밍 관련하여 기록을 남기고 있으니 좋은 참고가 되었으면 좋겠습니다.",
+    "프로그래밍에 대한 경험을 공유하는 곳입니다. 제 글을 통해 다양한 문제를 해결해 보세요.",
 };
 
 export default function RootLayout({ children }) {
