@@ -24,6 +24,13 @@ export async function newPost(title, content) {
   const { error } = await supabase.from("Post").insert({ title, content });
 }
 
+export async function updatePost(id, title, content) {
+  const { error } = await supabase
+    .from("Post")
+    .update({ title, content })
+    .eq("id", id);
+}
+
 export async function uploadImage(form, fileKey) {
   form.append("key", imageUploadKey);
 

@@ -6,11 +6,11 @@ import "@blocksuite/presets/themes/affine.css";
 import { Job, Schema, Workspace } from "@blocksuite/store";
 import { useEffect, useRef, useState } from "react";
 import "./style.css";
-import { newPost, uploadImage } from "@/app/actions";
+import { newPost, updatePost, uploadImage } from "@/app/actions";
 import { docSpecs } from "./custom-block";
 import { useRouter } from "next/navigation";
 
-export default function Editor({ content }) {
+export default function Editor({ content, id }) {
   const editorRef = useRef();
   const [pending, setPending] = useState(false);
   const router = useRouter();
@@ -36,10 +36,19 @@ export default function Editor({ content }) {
       }
     }
 
-    await newPost(
-      page.meta.title,
-      JSON.stringify(await job.pageToSnapshot(page))
-    );
+    if (id === null) {
+      await newPost(
+        page.meta.title,
+        JSON.stringify(await job.pageToSnapshot(page))
+      );
+    } else {
+      await updatePost(
+        id,
+        page.meta.title,
+        JSON.stringify(await job.pageToSnapshot(page))
+      );
+    }
+
     setPending(false);
     router.back();
     router.refresh();
