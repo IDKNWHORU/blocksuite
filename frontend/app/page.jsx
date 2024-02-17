@@ -12,11 +12,19 @@ export default async function App() {
 
   return (
     <>
-      {list.map(({ id, title }) => {
+      {list.map(({ id, title, content }) => {
         return (
-          <h1 key={id}>
-            <Link href={`/${id}`}>{title}</Link>
-          </h1>
+          <>
+            <Link className="link" href={`/${id}`} key={id}>
+              <h2>{title}</h2>
+            </Link>
+            <p>
+              {
+                JSON.parse(content).blocks.children[1].children[0].props.text
+                  .delta[0].insert
+              }
+            </p>
+          </>
         );
       })}
     </>

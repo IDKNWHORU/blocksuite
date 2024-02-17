@@ -1,0 +1,9 @@
+.link {
+  text-decoration: unset;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.link:visited {
+  color: #681da8;
+}

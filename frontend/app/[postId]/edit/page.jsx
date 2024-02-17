@@ -5,6 +5,8 @@ const Editor = dynamic(() => import("@/components/Editor"), {
   ssr: false,
 });
 
+export const revalidate = 0;
+
 export default async function EditPostPage({ params: { postId } }) {
   const post = await getPost(postId);
 

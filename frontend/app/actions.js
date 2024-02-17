@@ -9,7 +9,7 @@ const imageUploadUrl = process.env.IMAGE_UPLOAD_URI;
 const imageUploadKey = process.env.IMAGE_UPLOAD_KEY;
 
 export async function getPostList() {
-  const { data } = await supabase.from("Post").select("id, title");
+  const { data } = await supabase.from("Post").select();
 
   return data;
 }
