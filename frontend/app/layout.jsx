@@ -15,6 +15,10 @@ export default function RootLayout({ children }) {
           content={process.env.NAVER_SEARCH_ADVISOR}
         />
       </head>
+      <meta
+        name="google-site-verification"
+        content={process.env.GOOGLE_SEARCH_CONSOLE}
+      />
       <body>{children}</body>
     </html>
   );
