@@ -6,6 +6,7 @@ import "@blocksuite/presets/themes/affine.css";
 import { Job, Schema, Workspace } from "@blocksuite/store";
 import { useEffect, useRef } from "react";
 import "./style.css";
+import { getImage } from "@/app/actions";
 
 export default function Viewer({ content }) {
   const editorRef = useRef();
@@ -19,13 +20,19 @@ export default function Viewer({ content }) {
 
       const job = new Job({ workspace });
 
-      // const assets = await (await fetch("http://localhost:8080/make/file")).json();
-      // for(const key of assets) {
-      //   const blob = await (await fetch(`http://localhost:8080/make/file/${key}`)).blob();
-      //   const value = new File([blob], key, { type: blob.type });
+      const assets = content.blocks.children[1].children.filter(
+        ({ props }) => props.sourceId != null && props.sourceId !== ""
+      );
 
-      //   job.assets.set(key, value);
-      // }
+      for (const {
+        props: { sourceId },
+      } of assets) {
+        const url = await getImage(sourceId);
+        const blob = await (await fetch(url)).blob();
+        const value = new File([blob], sourceId, { type: blob.type });
+
+        job.assets.set(sourceId, value);
+      }
 
       const page = await job.snapshotToPage(content);
       page.awarenessStore.setReadonly(page, !page.readonly);

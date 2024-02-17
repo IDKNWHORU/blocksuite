@@ -6,7 +6,7 @@ import "@blocksuite/presets/themes/affine.css";
 import { Job, Schema, Workspace } from "@blocksuite/store";
 import { useEffect, useRef, useState } from "react";
 import "./style.css";
-import { newPost } from "@/app/actions";
+import { newPost, uploadImage } from "@/app/actions";
 import { docSpecs } from "./custom-block";
 import { useRouter } from "next/navigation";
 
@@ -26,19 +26,14 @@ export default function Editor({ content }) {
     const keys = await workspace.blob.list();
 
     if (keys.length > 0) {
-      const form = new FormData();
-
       for (const key of keys) {
+        const form = new FormData();
         const value = await workspace.blob.get(key);
         const file = new File([value], key, { type: value.type });
 
-        form.append("files", file);
+        form.append("image", file);
+        await uploadImage(form, key);
       }
-
-      await fetch("http://localhost:8080/make/file", {
-        method: "POST",
-        body: form,
-      });
     }
 
     await newPost(
