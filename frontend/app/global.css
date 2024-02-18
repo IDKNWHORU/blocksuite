@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body,
 html {
   height: 100%;
@@ -13,17 +17,22 @@ header {
   padding: 0 96px;
 }
 
-section {
+.section {
   margin: 0 97.0974px;
+  padding: 0 96px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
-article {
-  padding: 0 96px;
+.article {
+  flex-basis: 50%;
+  padding-right: 142px;
 }
 
 .link {
   text-decoration: unset;
-  color: black;
+  color: #1a0dab;
   font-size: 20px;
   font-weight: 400;
 }

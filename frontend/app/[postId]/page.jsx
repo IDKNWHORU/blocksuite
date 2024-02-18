@@ -23,14 +23,7 @@ export const revalidate = 0;
 async function PostContent({ postId }) {
   const post = await getPost(postId);
 
-  return (
-    <>
-      <div className="create-at-label">
-        <p>{post.createAt}</p>
-      </div>
-      <Viewer content={JSON.parse(post.content)} />
-    </>
-  );
+  return <Viewer content={JSON.parse(post.content)} />;
 }
 
 export default async function PostPage({ params: { postId } }) {

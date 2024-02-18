@@ -20,11 +20,11 @@ export default async function App() {
         </p>
       </header>
       <main>
-        <section>
+        <section className="section">
           {list.map(({ id, title, content }) => {
             return (
-              <article>
-                <Link className="link" href={`/${id}`} key={id}>
+              <article className="article" key={id}>
+                <Link className="link" href={`/${id}`}>
                   <h2>{title}</h2>
                 </Link>
                 <p>

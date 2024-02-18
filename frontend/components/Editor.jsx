@@ -36,7 +36,7 @@ export default function Editor({ content, id }) {
       }
     }
 
-    if (id === null) {
+    if (id == null) {
       await newPost(
         page.meta.title,
         JSON.stringify(await job.pageToSnapshot(page))
