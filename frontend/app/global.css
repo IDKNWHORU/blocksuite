@@ -8,8 +8,12 @@ html {
   margin: 0;
 }
 
-body {
+.no-scroll {
   overflow: hidden;
+}
+
+.scroll {
+  overflow: auto;
 }
 
 header {
@@ -43,4 +47,9 @@ header {
 
 .link:visited {
   color: #681da8;
+}
+
+.content-header {
+  margin: 0;
+  padding: 0;
 }

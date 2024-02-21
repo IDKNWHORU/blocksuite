@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import "./global.css";
 
 export const metadata = {
@@ -7,6 +8,9 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const headerList = headers();
+  const pathname = headerList.get("x-pathname");
+
   return (
     <html lang="en">
       <head>
@@ -19,7 +23,9 @@ export default function RootLayout({ children }) {
         name="google-site-verification"
         content={process.env.GOOGLE_SEARCH_CONSOLE}
       />
-      <body>{children}</body>
+      <body className={pathname === "/" ? "no-scroll" : "scroll"}>
+        {children}
+      </body>
     </html>
   );
 }

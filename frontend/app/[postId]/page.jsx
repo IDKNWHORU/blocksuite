@@ -29,10 +29,12 @@ async function PostContent({ postId }) {
 export default async function PostPage({ params: { postId } }) {
   return (
     <>
-      <BackButton />
-      {process.env.IS_ADMIN === "true" ? (
-        <Link href={`/${postId}/edit`}>수정하기</Link>
-      ) : null}
+      <header className="content-header">
+        <BackButton />
+        {process.env.IS_ADMIN === "true" ? (
+          <Link href={`/${postId}/edit`}>수정하기</Link>
+        ) : null}
+      </header>
       <PostContent postId={postId} />
     </>
   );
