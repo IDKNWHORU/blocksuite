@@ -14,7 +14,7 @@ export async function generateMetadata({ params: { postId } }) {
   return {
     title: post.title,
     description: JSON.parse(post.content).blocks.children[1].children[0].props
-      .text.delta[0].insert,
+      .text.delta[0]?.insert,
   };
 }
 
