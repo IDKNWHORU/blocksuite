@@ -10,5 +10,9 @@ export const revalidate = 0;
 export default async function EditPostPage({ params: { postId } }) {
   const post = await getPost(postId);
 
-  return <Editor content={JSON.parse(post.content)} id={postId} />;
+  return (
+    <section className="content">
+      <Editor content={JSON.parse(post.content)} id={postId} />
+    </section>
+  );
 }

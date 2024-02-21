@@ -83,9 +83,11 @@ export default function Editor({ content, id }) {
 
   return (
     <>
-      <button onClick={handleSaveButton} disabled={pending}>
-        {pending ? "저장 중입니다." : "저장하기"}
-      </button>
+      <header>
+        <button onClick={handleSaveButton} disabled={pending}>
+          {pending ? "저장 중입니다." : "저장하기"}
+        </button>
+      </header>
       <div ref={editorRef} />
     </>
   );

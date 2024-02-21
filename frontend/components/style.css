@@ -2,10 +2,6 @@ affine-page-meta-data {
   display: none;
 }
 
-.affine-doc-page-block-container {
-  max-width: 90% !important;
-}
-
 .button-back {
   background-color: transparent;
   border: none;
@@ -17,10 +13,4 @@ affine-page-meta-data {
 .button-back:hover {
   background-color: #eee;
   color: #333;
-}
-
-.create-at-label {
-  display: flex;
-  justify-content: flex-end;
-  padding: 0 45px;
 }

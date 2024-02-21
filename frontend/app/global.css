@@ -8,12 +8,8 @@ html {
   margin: 0;
 }
 
-.no-scroll {
+body {
   overflow: hidden;
-}
-
-.scroll {
-  overflow: auto;
 }
 
 header {
@@ -49,7 +45,7 @@ header {
   color: #681da8;
 }
 
-.content-header {
-  margin: 0;
-  padding: 0;
+.content {
+  height: inherit;
+  overflow: auto;
 }
