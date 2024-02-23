@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import { getPost } from "../actions";
 import BackButton from "@/components/BackButton";
 import Link from "next/link";
+import { concatText } from "@/functions/text";
 
 const Viewer = dynamic(() => import("@/components/Viewer"), {
   ssr: false,
@@ -13,8 +14,9 @@ export async function generateMetadata({ params: { postId } }) {
 
   return {
     title: post.title,
-    description: JSON.parse(post.content).blocks.children[1].children[0].props
-      .text.delta[0]?.insert,
+    description: concatText(
+      JSON.parse(post.content).blocks.children[1].children[0].props.text.delta
+    ),
   };
 }
 

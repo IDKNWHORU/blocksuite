@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getPostList } from "./actions";
+import { concatText } from "@/functions/text";
 
 export const metadata = {
   title: "WHORU 블로그",
@@ -11,7 +12,7 @@ export default async function App() {
   const list = await getPostList();
 
   return (
-    <>
+    <section className="content">
       <header>
         <h1>프로그래밍 경험을 공유하는 블로그</h1>
         <p>
@@ -31,16 +32,16 @@ export default async function App() {
                   <h2>{title}</h2>
                 </Link>
                 <p>
-                  {
+                  {concatText(
                     JSON.parse(content).blocks.children[1].children[0].props
-                      .text.delta[0]?.insert
-                  }
+                      .text.delta
+                  )}
                 </p>
               </article>
             );
           })}
         </section>
       </main>
-    </>
+    </section>
   );
 }
