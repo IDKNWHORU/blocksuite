@@ -6,7 +6,7 @@ import "@blocksuite/presets/themes/affine.css";
 import { Job, Schema, Workspace } from "@blocksuite/store";
 import { useEffect, useRef, useState } from "react";
 import "./style.css";
-import { newPost, updatePost, uploadImage } from "@/app/actions";
+import { getImage, newPost, updatePost, uploadImage } from "@/app/actions";
 import { docSpecs } from "./custom-block";
 import { useRouter } from "next/navigation";
 
@@ -64,6 +64,20 @@ export default function Editor({ content, id }) {
 
       if (Object.keys(content).length > 0) {
         const job = new Job({ workspace });
+
+        const assets = content.blocks.children[1].children.filter(
+          ({ props }) => props.sourceId != null && props.sourceId !== ""
+        );
+
+        for (const {
+          props: { sourceId },
+        } of assets) {
+          const url = await getImage(sourceId);
+          const blob = await (await fetch(url)).blob();
+          const value = new File([blob], sourceId, { type: blob.type });
+
+          job.assets.set(sourceId, value);
+        }
 
         const page = await job.snapshotToPage(content);
         editor.page = page;
